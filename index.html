@@ -1,48 +1,122 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>PKS Deutschland 2024 – Analyse</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        .chart {
-            margin: 40px 0;
-        }
-        img {
-            max-width: 100%;
-            border: 1px solid #ccc;
-            box-shadow: 2px 2px 10px #aaa;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tatstatistik Dashboard 2024</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #111;
+      color: #eee;
+    }
+    header {
+      background-color: #222;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.8rem;
+    }
+    nav {
+      background-color: #333;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+    }
+    nav a:hover {
+      color: #fff;
+    }
+    .chart-container {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+  </style>
 </head>
 <body>
-    <h1>📊 Tatstatistik Deutschland 2024 – Analyse</h1>
-    <p>Diese Seite zeigt eine visuelle Auswertung ausgewählter Kennzahlen aus der Polizeilichen Kriminalstatistik (PKS) für das Jahr 2024 in Deutschland.</p>
+  <header>
+    Tatstatistik Deutschland 2024
+  </header>
+  <nav>
+    <a href="#herkunft">Herkunft</a>
+    <a href="#geschlecht">Geschlecht</a>
+    <a href="#delikte">Delikte</a>
+  </nav>
 
-    <div class="chart">
-        <h2>1. Herkunft der Tatverdächtigen</h2>
-        <img src="charts_herkunft.png" alt="Diagramm: Herkunft">
-    </div>
+  <section id="herkunft" class="chart-container">
+    <h2>Tatverdächtige nach Herkunft</h2>
+    <canvas id="chartHerkunft"></canvas>
+  </section>
 
-    <div class="chart">
-        <h2>2. Geschlechterverteilung</h2>
-        <img src="charts_geschlecht.png" alt="Diagramm: Geschlecht">
-    </div>
+  <section id="geschlecht" class="chart-container">
+    <h2>Tatverdächtige nach Geschlecht</h2>
+    <canvas id="chartGeschlecht"></canvas>
+  </section>
 
-    <div class="chart">
-        <h2>3. Häufigste Delikte</h2>
-        <img src="charts_delikte.png" alt="Diagramm: Delikte">
-    </div>
+  <section id="delikte" class="chart-container">
+    <h2>Häufigste Delikte</h2>
+    <canvas id="chartDelikte"></canvas>
+  </section>
 
-    <p><strong>Datenquelle:</strong> Bundeskriminalamt (BKA), Polizeiliche Kriminalstatistik 2024</p>
+  <script>
+    const herkunftCtx = document.getElementById('chartHerkunft');
+    new Chart(herkunftCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Deutsch', 'Nicht-Deutsch'],
+        datasets: [{
+          label: 'Herkunft',
+          data: [70, 30],
+          backgroundColor: ['#4caf50', '#f44336']
+        }]
+      },
+      options: { responsive: true }
+    });
+
+    const geschlechtCtx = document.getElementById('chartGeschlecht');
+    new Chart(geschlechtCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Männlich', 'Weiblich'],
+        datasets: [{
+          label: 'Geschlecht',
+          data: [80, 20],
+          backgroundColor: ['#2196f3', '#e91e63']
+        }]
+      },
+      options: { responsive: true }
+    });
+
+    const delikteCtx = document.getElementById('chartDelikte');
+    new Chart(delikteCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Diebstahl', 'Körperverletzung', 'Betrug', 'Drogen', 'Sachbeschädigung'],
+        datasets: [{
+          label: 'Delikte',
+          data: [350000, 200000, 180000, 150000, 120000],
+          backgroundColor: '#ff9800'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
 </body>
 </html>
