@@ -7,7 +7,7 @@ Dieses Projekt visualisiert und analysiert ausgewählte Kennzahlen aus der Poliz
 - Tatverdächtige nach **Herkunft** (deutsch / nicht-deutsch)
 - Verteilung nach **Geschlecht**
 - Häufigste **Delikte**
-- Vergleich: Bundesländer (optional)
+- Vergleich: Bundesländer
 
 ## 📊 Datenquellen
 
