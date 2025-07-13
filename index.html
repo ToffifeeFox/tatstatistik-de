@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PKS 2024 – Tatverdächtigenstatistik</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: 0.4s;
+    }
+    :root {
+      --bg: #ffffff;
+      --text: #111111;
+    }
+    .dark {
+      --bg: #1e1e1e;
+      --text: #f5f5f5;
+    }
+    header {
+      padding: 1em;
+      text-align: center;
+      background-color: #444;
+      color: white;
+    }
+    section {
+      padding: 2em;
+      min-height: 100vh;
+    }
+    .toggle {
+      position: fixed;
+      top: 1em;
+      right: 1em;
+      background: #888;
+      padding: 0.5em;
+      cursor: pointer;
+    }
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="toggle" onclick="toggleDark()">🌙 / ☀️</div>
+  <header><h1>PKS 2024 – Tatverdächtigenstatistik</h1></header>
+
+  <section id="slideshow1">
+    <h2>Diagramm: Tatverdächtige nach Delikt und Herkunft</h2>
+    <canvas id="chartDelikt"></canvas>
+  </section>
+
+  <section id="slideshow2">
+    <h2>Diagramm: Tatverdächtige nach Bundesland</h2>
+    <canvas id="chartBundesland"></canvas>
+  </section>
+
+  <section id="karte">
+    <h2>Interaktive Deutschlandkarte</h2>
+    <p>Die Karte wird hier eingebettet (D3.js mit GeoJSON, Integration folgt separat).</p>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    function toggleDark() {
+      document.body.classList.toggle('dark');
+    }
+
+    async function loadCSV(url) {
+      const response = await fetch(url);
+      const data = await response.text();
+      const rows = data.split('\n').map(row => row.split(','));
+      return rows;
+    }
+
+    async function drawCharts() {
+      // Chart 1: Delikte
+      const deliktData = await loadCSV('data/delikte_utf8.csv');
+      const deliktLabels = deliktData.slice(1).map(row => row[0]);
+      const gesamt = deliktData.slice(1).map(row => parseInt(row[5]));
+
+      new Chart(document.getElementById('chartDelikt'), {
+        type: 'bar',
+        data: {
+          labels: deliktLabels,
+          datasets: [{
+            label: 'Gesamtzahl Tatverdächtige',
+            data: gesamt,
+            backgroundColor: 'rgba(75, 192, 192, 0.6)'
+          }]
+        },
+        options: {
+          responsive: true
+        }
+      });
+
+      // Chart 2: Bundesland
+      const bundesData = await loadCSV('data/bundeslaender_utf8.csv');
+      const bundesLabels = bundesData.slice(1).map(row => row[0]);
+      const bundesValues = bundesData.slice(1).map(row => parseInt(row[1]));
+
+      new Chart(document.getElementById('chartBundesland'), {
+        type: 'bar',
+        data: {
+          labels: bundesLabels,
+          datasets: [{
+            label: 'Tatverdächtige pro Bundesland',
+            data: bundesValues,
+            backgroundColor: 'rgba(255, 99, 132, 0.6)'
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true
+        }
+      });
+    }
+
+    drawCharts();
+  </script>
+</body>
+</html>
