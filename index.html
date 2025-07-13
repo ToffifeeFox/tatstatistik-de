@@ -1,119 +1,132 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tatstatistik Dashboard 2024</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tatstatistik Deutschland 2024</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
+    :root {
+      --bg-light: #ffffff;
+      --text-light: #111;
+      --bg-dark: #121212;
+      --text-dark: #e0e0e0;
+      --accent: #007acc;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      background-color: #111;
-      color: #eee;
+      padding: 1rem;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
     }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
     header {
-      background-color: #222;
-      padding: 1rem;
-      text-align: center;
-      font-size: 1.8rem;
-    }
-    nav {
-      background-color: #333;
-      padding: 1rem;
       display: flex;
-      justify-content: center;
-      gap: 1.5rem;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
     }
-    nav a {
-      color: #ccc;
-      text-decoration: none;
+
+    h1 {
+      margin: 0.5rem 0;
     }
-    nav a:hover {
-      color: #fff;
+
+    .toggle-btn {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
     }
-    .chart-container {
-      padding: 2rem;
-      max-width: 1000px;
-      margin: auto;
-    }
+
     canvas {
-      width: 100% !important;
-      height: auto !important;
+      max-width: 100%;
+      height: auto;
+      margin: 2rem 0;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.3rem;
+      }
+
+      .toggle-btn {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    Tatstatistik Deutschland 2024
+    <h1>📊 Tatstatistik Deutschland 2024</h1>
+    <button class="toggle-btn" onclick="toggleTheme()">🌗 Wechseln</button>
   </header>
-  <nav>
-    <a href="#herkunft">Herkunft</a>
-    <a href="#geschlecht">Geschlecht</a>
-    <a href="#delikte">Delikte</a>
-  </nav>
 
-  <section id="herkunft" class="chart-container">
-    <h2>Tatverdächtige nach Herkunft</h2>
+  <section>
+    <h2>👤 Herkunft der Tatverdächtigen</h2>
     <canvas id="chartHerkunft"></canvas>
-  </section>
 
-  <section id="geschlecht" class="chart-container">
-    <h2>Tatverdächtige nach Geschlecht</h2>
+    <h2>🚻 Verteilung nach Geschlecht</h2>
     <canvas id="chartGeschlecht"></canvas>
-  </section>
 
-  <section id="delikte" class="chart-container">
-    <h2>Häufigste Delikte</h2>
+    <h2>🔍 Häufigste Delikte</h2>
     <canvas id="chartDelikte"></canvas>
   </section>
 
   <script>
-    const herkunftCtx = document.getElementById('chartHerkunft');
-    new Chart(herkunftCtx, {
-      type: 'doughnut',
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+
+    // Daten simuliert aus CSV, du kannst dynamisch per JS laden
+    const chartHerkunft = new Chart(document.getElementById("chartHerkunft"), {
+      type: "pie",
       data: {
-        labels: ['Deutsch', 'Nicht-Deutsch'],
+        labels: ["Deutsch", "Nicht-Deutsch"],
         datasets: [{
-          label: 'Herkunft',
-          data: [70, 30],
-          backgroundColor: ['#4caf50', '#f44336']
+          label: "Herkunft",
+          data: [68.3, 31.7],
+          backgroundColor: ["#4CAF50", "#FF5722"]
         }]
-      },
-      options: { responsive: true }
+      }
     });
 
-    const geschlechtCtx = document.getElementById('chartGeschlecht');
-    new Chart(geschlechtCtx, {
-      type: 'bar',
+    const chartGeschlecht = new Chart(document.getElementById("chartGeschlecht"), {
+      type: "doughnut",
       data: {
-        labels: ['Männlich', 'Weiblich'],
+        labels: ["Männlich", "Weiblich"],
         datasets: [{
-          label: 'Geschlecht',
-          data: [80, 20],
-          backgroundColor: ['#2196f3', '#e91e63']
+          label: "Geschlecht",
+          data: [77.2, 22.8],
+          backgroundColor: ["#2196F3", "#E91E63"]
         }]
-      },
-      options: { responsive: true }
+      }
     });
 
-    const delikteCtx = document.getElementById('chartDelikte');
-    new Chart(delikteCtx, {
-      type: 'bar',
+    const chartDelikte = new Chart(document.getElementById("chartDelikte"), {
+      type: "bar",
       data: {
-        labels: ['Diebstahl', 'Körperverletzung', 'Betrug', 'Drogen', 'Sachbeschädigung'],
+        labels: ["Diebstahl", "Körperverletzung", "Betrug", "Drogen", "Sachbeschädigung"],
         datasets: [{
-          label: 'Delikte',
-          data: [350000, 200000, 180000, 150000, 120000],
-          backgroundColor: '#ff9800'
+          label: "Anzahl",
+          data: [134567, 104321, 98765, 76321, 54210],
+          backgroundColor: "#FFC107"
         }]
       },
       options: {
         responsive: true,
         scales: {
-          y: {
-            beginAtZero: true
-          }
+          y: { beginAtZero: true }
         }
       }
     });
